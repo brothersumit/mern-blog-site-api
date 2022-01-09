@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    <h1>Welcome <%= name %>!</h1>
+    <p>Please verify your email to complete your account setup.</p>
+
+    <a href="http://demo-app-express.herokuapp.com/auth/email-verify/<%= emailVerifyToken %>"><button type="button" name="button">Verify</button></a>
+
+    <!--
+    <a href="http://localhost:3000/auth/email-verify/<%= emailVerifyToken %>"><button type="button" name="button">Verify</button></a>
+  -->
+
+    <p>Alternatively, paste the following URL into your browser:</p>
+
+    <a href="http://demo-app-express.herokuapp.com/auth/email-verify/<%= emailVerifyToken %>">http://demo-app-express.herokuapp.com/email-verify/<%= emailVerifyToken %></a>
+
+    <!--
+    <a href="http://localhost:3000/auth/email-verify/<%= emailVerifyToken %>">http://localhost:3000/auth/email-verify/<%= emailVerifyToken %></a>
+    -->
+
+
+    <br>
+    <br>
+    <p>If you need further assistance, please contact our Help team.</p>
+    <p>Thanks,</p>
+    <p>MERN Blog Site</p>
+  </body>
+</html>
