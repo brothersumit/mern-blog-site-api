@@ -1,10 +1,10 @@
 var express = require('express');
 var router = express.Router();
 const Posts = require('../models/postModel');
-const auth = require('../middleware/auth');
+//const auth = require('../middleware/auth');
 
 /* GET posts page. */
-router.get('/', auth, function(req, res, next){
+router.get('/', function(req, res, next){
     Posts.find({})
     .then((posts) => {
         data = {
@@ -16,7 +16,7 @@ router.get('/', auth, function(req, res, next){
 })
 
 //add post function 
-router.post('/', auth, function(req, res, next){
+router.post('/', function(req, res, next){
     
     formdata = {
         title: req.body.title,
