@@ -3,7 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-var config = require('./config');
+//var config = require('./config');
 const mongoose = require('mongoose');
 
 var indexRouter = require('./routes/index');
@@ -11,12 +11,13 @@ var authRouter = require('./routes/auth');
 var usersRouter = require('./routes/users');
 var postsRouter = require('./routes/posts');
 var cors = require('cors');
+require('dotenv').config();
 
 var app = express();
 app.use(cors({origin: 'http://localhost:3000'}));
 
 
-const url = config.mongoUrl;
+const url = process.env.MONGODB_URL;
 const connect = mongoose.connect(url, {useNewUrlParser: true});
 
 //Connect to Database test
