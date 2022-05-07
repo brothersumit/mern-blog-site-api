@@ -10,8 +10,10 @@ var indexRouter = require('./routes/index');
 var authRouter = require('./routes/auth');
 var usersRouter = require('./routes/users');
 var postsRouter = require('./routes/posts');
+var cors = require('cors');
 
 var app = express();
+app.use(cors({origin: 'http://localhost:3000'}));
 
 
 const url = config.mongoUrl;

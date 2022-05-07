@@ -4,12 +4,13 @@ const Posts = require('../models/postModel');
 const auth = require('../middleware/auth');
 
 /* GET posts page. */
-router.get('/', auth, function(req, res, next){
+router.get('/', function(req, res, next){
     Posts.find({})
     .then((posts) => {
         data = {
             posts: posts
         }
+        res.header("Access-Control-Allow-Origin", "*");
         res.json(data);
     }, (err) => next(err))
     .catch((err) => next(err));
