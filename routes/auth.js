@@ -29,19 +29,16 @@ router.post('/login', (req, res, next) => {
   }
   email = req.body.email;
   password = req.body.password;
-  //Users.findOne({"email": email, "password": password})
-  Users.findOne({ "email": email })
-    .then((user) => {
-      if (user == null) {
-        //user does not exist
-        res.json({message: 'user does not exist.'});
-      } else {
-        if (passwordHash.verify(password, user.password)) {
 
-          var token = jwt.sign({ id: user._id }, process.env.TOKEN_SECRET, {
-            expiresIn: 86400 // expires in 24 hours
-          });
-         
+  //Users.findOne({"email": email, "password": password})
+  Users.findOne({"email":email})
+    .then((user) => {
+      //console.log(user);
+      
+      if (user !== null) {
+
+        if (passwordHash.verify(password, user.password)) {
+          var token = jwt.sign({id: user._id}, process.env.TOKEN_SECRET, { expiresIn: 86400 });          
           userdata = {
             'email': user.email,
             'role': user.role,
@@ -51,12 +48,11 @@ router.post('/login', (req, res, next) => {
             'token': token
           };
 
-         
-
           res.json({
             message: 'Logged In successfully',
             data: userdata
           });
+
         } else {
           data = { errors: "Email or Password is incorrect!" }
           res.json({
@@ -65,6 +61,7 @@ router.post('/login', (req, res, next) => {
           });
         }
       }
+      
     }).catch((err) => next(err));
    
 });

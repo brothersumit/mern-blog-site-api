@@ -4,7 +4,7 @@ const Posts = require('../models/postModel');
 const auth = require('../middleware/auth');
 
 /* GET posts page. */
-router.get('/', function(req, res, next){
+router.get('/', auth, function(req, res, next){
     Posts.find({})
     .then((posts) => {
         data = {

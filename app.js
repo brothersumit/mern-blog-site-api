@@ -22,7 +22,7 @@ const connect = mongoose.connect(url, {useNewUrlParser: true});
 
 //Connect to Database test
 connect.then((db)=> {
-  console.log('Connected successfully');
+  console.log('Database connected successfully!');
 }, (err)=> {
   console.log(err);
 });
