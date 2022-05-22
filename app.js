@@ -14,7 +14,7 @@ var cors = require('cors');
 require('dotenv').config();
 
 var app = express();
-app.use(cors({origin: 'https://a-mern-blog-site.herokuapp.com'}));
+app.use(cors({origin: '*'}));
 
 
 const url = process.env.MONGODB_URL;
