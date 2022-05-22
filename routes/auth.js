@@ -47,6 +47,7 @@ router.post('/login', (req, res, next) => {
             'name': user.firstname + ' ' + user.lastname,
             'token': token
           };
+          res.header("Access-Control-Allow-Origin", "*");
 
           res.json({
             message: 'Logged In successfully',
