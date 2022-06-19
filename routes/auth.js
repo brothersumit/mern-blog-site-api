@@ -42,14 +42,15 @@ router.post('/login', (req, res, next) => {
           userdata = {
             'email': user.email,
             'role': user.role,
-            'username': user.username,
             'userid': user._id,
-            'name': user.firstname + ' ' + user.lastname,
+            'firstname': user.firstname,
+            'lastname': user.lastname,
             'token': token
           };
           res.header("Access-Control-Allow-Origin", "*");
 
           res.json({
+            success: true,
             message: 'Logged In successfully',
             data: userdata
           });
@@ -57,6 +58,7 @@ router.post('/login', (req, res, next) => {
         } else {
           data = { errors: "Email or Password is incorrect!" }
           res.json({
+            success: false,
             message: 'Could Not Login',
             data: data
           });
@@ -73,8 +75,6 @@ router.post('/register',
   //check form validation
   body('firstname').isLength({ min: 1 })
     .withMessage('Required'),
-  body('username').isLength({ min: 5 })
-    .withMessage('must be at least 5 chars long'),
   body('email').isEmail().normalizeEmail(),
   body('password')
     .isLength({ min: 5 })
@@ -93,42 +93,58 @@ router.post('/register',
     var formdata = {
       "firstname": req.body.firstname,
       "lastname": req.body.lastname,
-      "username": req.body.username,
       "role": req.body.role,
       "email": req.body.email,
       "password": passwordHash.generate(req.body.password)
     }
 
-    Users.create(formdata)
-      .then((user) => {
-        if (user == null) {
-        res.send({message: 'Could not register!'});
-        } else {
+    //check if user already exists
+    Users.findOne({"email":req.body.email})
+    .then((user) => {
+      if(user != null){
+        data = { errors: "User Already exists with this email." }
+        res.json({
+          success: false,
+          message: 'Could not Register.',
+          data: data
+        });
+      }else{
+        //Create user
+        Users.create(formdata)
+          .then((user) => {
+            if (user == null) {
+              res.send({message: 'Could not register!'});
+            } else {
 
-          emailVerifyTokenData = {
-            email: user.email,
-            emailVerifyToken: Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
-          }
-
-          Users.findByIdAndUpdate(user._id, { email_verify_token: emailVerifyTokenData.emailVerifyToken })
-            .then((user) => {
-              //send Email
-              mailData = {
-                name: user.firstname,
-                emailVerifyToken: jwt.sign(emailVerifyTokenData, 'email-verify-token')
+              emailVerifyTokenData = {
+                email: user.email,
+                emailVerifyToken: Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
               }
-              mailer(req.body.email, 'Verify your email', 'welcome-email.ejs', mailData);
-              //console.log(user);
-              var token = jwt.sign({ id: user._id }, process.env.TOKEN_SECRET, {
-                expiresIn: 86400 // expires in 24 hours
-              });
-              res.json({
-                message: 'Registration successfull!',
-                token: token
-              });
-            }).catch((err) => next());
+            
+              //users create starts
+              Users.findByIdAndUpdate(user._id, { email_verify_token: emailVerifyTokenData.emailVerifyToken })
+                .then((user) => {
+                  //send Email
+                  mailData = {
+                    name: user.firstname,
+                    emailVerifyToken: jwt.sign(emailVerifyTokenData, 'email-verify-token')
+                  }
+                  mailer(req.body.email, 'Verify your email', 'welcome-email.ejs', mailData);
+                  //console.log(user);
+                  var token = jwt.sign({ id: user._id }, process.env.TOKEN_SECRET, {
+                    expiresIn: 86400 //expires in 24 hours
+                  });
+                  res.json({
+                    message: 'Registration successfull!',
+                    token: token
+                  });
+                }).catch((err) => next());
+                //user create ends
 
+            }
+          }).catch((err) => next(err));
         }
+
       }).catch((err) => next(err));
 
   });
