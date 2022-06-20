@@ -33,8 +33,7 @@ router.post('/login', (req, res, next) => {
   //Users.findOne({"email": email, "password": password})
   Users.findOne({"email":email})
     .then((user) => {
-      //console.log(user);
-      
+      //console.log(user);      
       if (user !== null) {
 
         if (passwordHash.verify(password, user.password)) {
