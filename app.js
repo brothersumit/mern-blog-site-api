@@ -10,12 +10,14 @@ var indexRouter = require('./routes/index');
 var authRouter = require('./routes/auth');
 var usersRouter = require('./routes/users');
 var postsRouter = require('./routes/posts');
+var userPostsRouter = require('./routes/user/posts');
+var userProfileRouter = require('./routes/user/profile');
+
 var cors = require('cors');
 require('dotenv').config();
 
 var app = express();
 app.use(cors({origin: '*'}));
-
 
 const url = process.env.MONGODB_URL;
 const connect = mongoose.connect(url, {useNewUrlParser: true});
@@ -41,10 +43,8 @@ app.use('/', indexRouter);
 app.use('/auth', authRouter);
 app.use('/users', usersRouter);
 app.use('/posts', postsRouter);
-
-
-
-
+app.use('/user/posts', userPostsRouter);
+app.use('/user/profile', userProfileRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
