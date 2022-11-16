@@ -5,8 +5,6 @@ const Posts = require('../../models/postModel');
 
 router.get('/', auth, (req, res, next) => {
 	const user_id = req.user.id;
-	console.log(user_id);
-
 	Posts.find({author: user_id})
     .then((posts) => {
 

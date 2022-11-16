@@ -4,7 +4,7 @@ const auth = require('../../middleware/auth');
 const Users = require('../../models/userModel');
 
 Router.get('/', auth, (req, res, next) => {
-	console.log(req.user.id);
+	//console.log(req.user.id);
 	Users.findOne({_id: req.user.id}, {firstname: 1, lastname: 1, role: 1, email: 1})
 	.then((user) => {
 		if(user !== null){
