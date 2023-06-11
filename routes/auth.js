@@ -37,7 +37,7 @@ router.post('/login', (req, res, next) => {
       if (user !== null) {
 
         if (passwordHash.verify(password, user.password)) {
-          var token = jwt.sign({id: user._id}, process.env.TOKEN_SECRET, { expiresIn: 86400 });          
+          var token = jwt.sign({id: user._id}, process.env.TOKEN_SECRET, { expiresIn: '365d' });          
           userdata = {
             'email': user.email,
             'role': user.role,
